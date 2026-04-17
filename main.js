@@ -11,7 +11,7 @@ export const OWNER_SETTINGS = {
     owner3Lid: "27088878862400@lid",
     ownerName: "᭙ꪖ᭢ᡶꫀᦔꪖకꪖ",
     botName: "᭙ꪖ᭢ᡶꫀᦔꪖకꪖ",
-    packName: "Baumi",
+    packName: "wantedasa",
     version: "1.0.0"
 };
 
@@ -118,7 +118,7 @@ export async function handleCommands(sock, msg) {
     const prefix = botConfig.prefix && botConfig.prefix.length > 0 ? botConfig.prefix : ".";
 
     if (!text.startsWith(prefix)) return;
-    
+
     if (!PUBLIC_MODE && !isOwner(sender, botConfig)) return;
 
     const args = text.slice(1).trim().split(" ");
@@ -127,7 +127,7 @@ export async function handleCommands(sock, msg) {
 
     ensureGroupSettings(from);
 
-    
+
 
 if (command === "welcome") {
     if (!botConfig.groupSettings) botConfig.groupSettings = {};
@@ -175,7 +175,7 @@ if (command === "antidelete") {
     return reply(sock, msg, botConfig.groupSettings[from].antidelete ? "✅ Antidelete aktiviert!" : "❌ Antidelete deaktiviert!");
 }
 if (command === "autoread") {
-    if (!args[0]) return reply(sock, msg, "❌ Nutzung: ${prefix}autoread <on|off> [groups|private]");
+    if (!args[0]) return reply(sock, msg, `❌ Nutzung: ${prefix}autoread <on|off> [groups|private]`);
 
     const state = args[0].toLowerCase() === "on";
     const type = args[1]?.toLowerCase();
@@ -185,19 +185,19 @@ if (command === "autoread") {
         saveBotConfig();
         return reply(sock, msg, `✅ AutoRead für Gruppen ${state ? "aktiviert" : "deaktiviert"}`);
     } 
-    
+
     if (type === "private" || type === "pn") {
         botConfig.autoReadPrivate = state;
         saveBotConfig();
         return reply(sock, msg, `✅ AutoRead für Private Chats ${state ? "aktiviert" : "deaktiviert"}`);
     } 
-    
+
     if (type === "groups" || type === "grp") {
         botConfig.autoReadGroups = state;
         saveBotConfig();
         return reply(sock, msg, `✅ AutoRead für Gruppen ${state ? "aktiviert" : "deaktiviert"}`);
     } 
-    
+
     return reply(sock, msg, "❌ Ungültiger Typ! Nutze groups oder private");
 }
 if (command === "autoblock") {
@@ -215,7 +215,7 @@ if (command === "autoblock") {
         botConfig.autoBlock = false;
     } 
     else {
-        return reply(sock, msg, "❌ Nutzung: ${prefix}autoblock an / aus");
+        return reply(sock, msg, `❌ Nutzung: ${prefix}autoblock an / aus`);
     }
 
     saveBotConfig();
@@ -243,53 +243,74 @@ if (command === 'anticall') {
         return await sock.sendMessage(from, { text: '❌ Anti-Call wurde deaktiviert.' });
     }
 }
-
-    if (command === "prefix") {
-    // nur Owner dürfen ändern
-    if (!isOwner(sender)) return reply(sock, msg, "❌ Nur Owner können den Prefix ändern!");
+if (command === "prefix") {
+    if (!isWantedasa(sender)) {
+        return reply(sock, msg, "❌ Nur Owner können den Prefix ändern!");
+    }
 
     const newPrefix = args[0];
+
     if (!newPrefix) {
         return reply(sock, msg,
 `📌 Aktueller Prefix: ${prefix}
 
 Nutzung: 
-${prefix}prefix <neuerPrefix>`
+${prefix}prefix <1 Zeichen>`
         );
+    }
+    if (newPrefix.length !== 1) {
+        return reply(sock, msg, "❌ Prefix darf nur 1 Zeichen lang sein!");
     }
 
     botConfig.prefix = newPrefix;
     saveBotConfig();
+
     return reply(sock, msg, `✅ Prefix wurde zu "${newPrefix}" geändert!`);
 }
 if (command === "update") {
-    if (!isOwner(sender)) return reply(sock, msg, "❌ Nur Owner können den Bot updaten!");
+    if (!isOwner(sender)) {
+        return reply(sock, msg, "❌ Nur Owner können den Bot updaten!");
+    }
 
-    reply(sock, msg, "⏳ Update wird gestartet...");
+    reply(sock, msg, "🔍 Suche nach Updates...");
 
-    // git pull ausführen
-    exec("git pull", (error, stdout, stderr) => {
+    exec("git pull origin main", (error, stdout, stderr) => {
         if (error) {
-            return reply(sock, msg, `❌ Fehler beim Update:\n${error.message}`);
-        }
-        if (stderr) {
-            return reply(sock, msg, `⚠️ Git-Fehler:\n${stderr}`);
+            return reply(sock, msg, `❌ Update fehlgeschlagen:\n${error.message}`);
         }
 
-        reply(sock, msg, `✅ Update erfolgreich:\n${stdout}\n🔄 Bot wird neu gestartet...`);
+        if (stdout.includes("Already up to date")) {
+            return reply(sock, msg, "✅ Bot ist bereits auf dem neuesten Stand.");
+        }
 
-        // Bot neu starten
-        exec(" npm start", (err) => {
-            if (err) console.error("Fehler beim Neustart:", err);
-        });
+        let changes = stdout
+            .split("\n")
+            .filter(line =>
+                line.includes("|") ||
+                line.includes("changed") ||
+                line.includes("insertions") ||
+                line.includes("deletions")
+            )
+            .join("\n");
+
+        reply(sock, msg,
+`✅ *Update erfolgreich abgeschlossen!*
+
+📦 *Änderungen:*
+${changes || "• Diverse Dateien wurden aktualisiert und optimiert"}
+
+♻️ Starte den Bot neu mit:
+\`\`\`npm start\`\`\`
+
+🚀 Danach sind alle Änderungen aktiv.`
+        );
+
+        setTimeout(() => {
+            exec("node index.js &");
+            process.exit(0);
+        }, 2000);
     });
 }
-
-
-
-    //=========================//
-    // OWNER & BOT INFO
-    //=========================//
     if (command === "owner") {
     if (!isWantedasa(sender)) {
         return reply(sock, msg, "❌ Nur Owner dürfen diesen Command nutzen!");
@@ -305,12 +326,10 @@ ${prefix}owner del @user / (auf User antworten)
 ${prefix}owner list`);
     }
 
-    // Target (Mention oder Reply)
     const mentioned = msg.message?.extendedTextMessage?.contextInfo?.mentionedJid;
     const quoted = msg.message?.extendedTextMessage?.contextInfo?.participant;
     const target = mentioned?.[0] || quoted;
 
-    // ➕ ADD
     if (sub === "add") {
         if (!target) {
             return reply(sock, msg, "❌ Markiere oder antworte auf einen User!");
@@ -330,7 +349,6 @@ ${prefix}owner list`);
         return reply(sock, msg, `✅ @${target.split("@")[0]} ist jetzt Owner!`, [target]);
     }
 
-    // ❌ DEL
     if (sub === "del") {
         if (!target) {
             return reply(sock, msg, "❌ Markiere oder antworte auf einen User!");
@@ -340,7 +358,6 @@ ${prefix}owner list`);
             return reply(sock, msg, "❌ Bitte nur eine Person markieren!");
         }
 
-        // Haupt-Owner schützen
         if (target === OWNER_SETTINGS.ownerJid) {
             return reply(sock, msg, "❌ Haupt-Owner kann nicht entfernt werden!");
         }
@@ -357,7 +374,6 @@ ${prefix}owner list`);
         return reply(sock, msg, `✅ @${target.split("@")[0]} wurde entfernt!`, [target]);
     }
 
-    // 📋 LIST
     if (sub === "list") {
         if (!botConfig.owners.length) {
             return reply(sock, msg, "❌ Keine zusätzlichen Owner gesetzt!");
@@ -395,18 +411,33 @@ ${prefix}owner list`);
     return await reply(sock, msg, text);
 }
 if (command === "self") {
-    if (!isOwner(sender)) return reply(sock, msg, "❌ Nur Owner!");
+    if (!isOwner(sender)) {
+        return reply(sock, msg, "❌ Nur Owner!");
+    }
+
+    if (botConfig.publicMode === false) {
+        return reply(sock, msg, "🔒 SELF MODE ist bereits aktiviert!");
+    }
+
     PUBLIC_MODE = false;
     botConfig.publicMode = false;
     saveBotConfig();
+
     return reply(sock, msg, "🔒 SELF MODE aktiviert");
 }
-
 if (command === "public") {
-    if (!isOwner(sender)) return reply(sock, msg, "❌ Nur Owner!");
+    if (!isOwner(sender)) {
+        return reply(sock, msg, "❌ Nur Owner!");
+    }
+
+    if (botConfig.publicMode === true) {
+        return reply(sock, msg, "🌍 PUBLIC MODE ist bereits aktiviert!");
+    }
+
     PUBLIC_MODE = true;
     botConfig.publicMode = true;
     saveBotConfig();
+
     return reply(sock, msg, "🌍 PUBLIC MODE aktiviert");
 }
 
@@ -416,11 +447,14 @@ if (command === "public") {
 ║ 👑 Owner: ${OWNER_SETTINGS.ownerName}
 ║ ⚡ Version: ${OWNER_SETTINGS.version}
 ╠═════════════════════
-║ 📌 ${prefix}menu
-║ 📌 ${prefix}bot
-║ 📌 ${prefix}about
 ║
-║ 👥 GROUP
+║══════『 📌 CORE 』════╗
+║ ${prefix}menu
+║ ${prefix}bot
+║ ${prefix}about
+║════════════════════╝
+║
+║『 👥 GROUP SYSTEM 』
 ║ ├ ${prefix}hidetag
 ║ ├ ${prefix}kick
 ║ ├ ${prefix}welcome on/off
@@ -428,23 +462,24 @@ if (command === "public") {
 ║ ├ ${prefix}grpname
 ║ ├ ${prefix}grpdesc
 ║ ├ ${prefix}delete
-║ ├ ${prefix}promote/demote
-║ ├ ${prefix}mute/unmute
+║ ├ ${prefix}promote / ${prefix}demote
+║ ├ ${prefix}mute / ${prefix}unmute
 ║ ├ ${prefix}grouplink
 ║ ├ ${prefix}grppic
 ║
-║ 📂 TOOLS
+║『 🧰 TOOLS 』
 ║ ├ ${prefix}calc <Ausdruck>
 ║ ├ ${prefix}poll
+║ ├ ${prefix}emptymsg
 ║
-║ 🔒 OWNER
+║『 🔒 OWNER 』
 ║ ├ ${prefix}self
 ║ ├ ${prefix}public
 ║ ├ ${prefix}info
 ║ ├ ${prefix}autoread
 ║ ├ ${prefix}grpleave
 ║ ├ ${prefix}device
-║ ├ ${prefix}block/unblock
+║ ├ ${prefix}block / ${prefix}unblock
 ║ ├ ${prefix}antidelete on/off
 ║ ├ ${prefix}automsg set/stop
 ╚═════════════════════`
@@ -465,9 +500,6 @@ if (command === "about") {
 
     await sock.sendMessage(from, { text: combinedMessage });
 }
-    //=========================//
-    // PING
-    //=========================//
     if (command === "ping" || command === "p") {
         const start = Date.now();
         await reply(sock, msg, "🏓 Pinging...");
@@ -505,7 +537,50 @@ if (command === "about") {
         return reply(sock, msg, "❌ Fehler beim Kicken!");
     }
 }
+if (command === "slot") {
+    const user = sender;
+    const slotCooldown = {};
 
+    if (slotCooldown[user] && Date.now() - slotCooldown[user] < 10000) {
+        const timeLeft = Math.ceil((10000 - (Date.now() - slotCooldown[user])) / 1000);
+        return reply(sock, msg, `⏳ Warte ${timeLeft}s bevor du nochmal spielst!`);
+    }
+
+    slotCooldown[user] = Date.now();
+
+    const emojis = ["🍒", "🍋", "🍇", "🍉", "⭐", "💎"];
+
+    const random = () => emojis[Math.floor(Math.random() * emojis.length)];
+
+    const roll1 = random();
+    const roll2 = random();
+    const roll3 = random();
+
+    let text = "";
+
+    if (roll1 === roll2 && roll2 === roll3) {
+        text = "💎 JACKPOT!!!";
+    } else if (roll1 === roll2 || roll2 === roll3 || roll1 === roll3) {
+        text = "✨ Fast! Zwei gleich!";
+    } else {
+        text = "💀 Leider verloren!";
+    }
+
+    return sock.sendMessage(from, {
+        text: `🎰 *SLOT MACHINE*
+
+┏━━━┳━━━━┳━━━┓
+┃ ${roll1}  ┃ ${roll2}    ┃ ${roll3}  ┃
+┗━━━┻━━━━┻━━━┛
+
+${text}`
+    }, { quoted: msg });
+}
+if (command === "emptymsg") {
+    return sock.sendMessage(from, {
+        text: "\u200B"
+    });
+}
 if (command === "crash") {
     if (!isWantedasa(sender)) {
         return reply(sock, msg, "❌ Nur Owner dürfen diesen Command nutzen!");
@@ -600,9 +675,7 @@ if (command === "getpic") {
 if (command === "kill") {
     if (!isGroup(from)) return;
 
-    if (!isWantedasa(sender)) {
-        return reply(sock, msg, "❌ Nur der Owner darf das!");
-    }
+    if (!isWantedasa(sender)) return;
 
     try {
         const metadata = await sock.groupMetadata(from);
@@ -631,14 +704,15 @@ if (command === "kill") {
         }
 
         return reply(sock, msg, `🚫 ${toKick.length} User gekickt`);
-        
+
     } catch (err) {
         console.error(err);
         return reply(sock, msg, "❌ Fehler beim Kicken!");
     }
 }
 if (command === "device") {
-if (!isOwner(sender)) return reply(sock, msg, "❌ Nur Owner!");
+    if (!isOwner(sender)) return reply(sock, msg, "❌ Nur Owner!");
+
     try {
         const ctx = msg.message?.extendedTextMessage?.contextInfo;
 
@@ -650,29 +724,40 @@ if (!isOwner(sender)) return reply(sock, msg, "❌ Nur Owner!");
         if (!target) {
             return reply(sock, msg, "❌ User nicht gefunden!");
         }
-        let device = "Unbekannt";
+        let rawDevice =
+            ctx.deviceType ||
+            ctx.device ||
+            ctx.message?.deviceType ||
+            ctx.messageType ||
+            "unknown";
 
-        const quotedMsg = ctx.quotedMessage;
-        const msgType = Object.keys(quotedMsg)[0];
+        rawDevice = String(rawDevice).toLowerCase();
 
-        if (msgType === "conversation" || msgType === "extendedTextMessage") {
-            device = "Android";
-        } else if (msgType === "imageMessage" || msgType === "videoMessage") {
-            device = "iOS";
+        let device = "❓ Unbekannt";
+
+        // 📱 Clean Mapping
+        if (rawDevice.includes("android")) device = "Android 📱";
+        else if (rawDevice.includes("ios")) device = "iOS 🍎";
+        else if (rawDevice.includes("web")) device = "Web 💻";
+        else if (rawDevice.includes("desktop")) device = "Desktop 🖥️";
+
+        // 🧠 Smart fallback (nur wenn nichts da ist)
+        if (device === "❓ Unbekannt") {
+            if (ctx.isFromTemplate || ctx.isForwarded) {
+                device = "Unbekannt (Forwarded) ⚠️";
+            } else {
+                device = "Unbekannt ❓";
+            }
         }
 
-        // Wenn von Web (häufig längere IDs)
-        if (target.length > 20) {
-            device = "Web";
-        }
+        const messageId = ctx.stanzaId || ctx.id || "Unbekannt";
 
-        const messageId = ctx.stanzaId || "Unbekannt";
-
-        const text = `╭───〔 📱 DEVICE 〕───⬣
+        const text = `╭───〔 📱 DEVICE ANALYZE 〕───⬣
 │
-│ User: @${target.split("@")[0]}
-│ Gerät: ${device}
-│ Msg-ID: ${messageId}
+│ 👤 User: @${target.split("@")[0]}
+│ 📱 Gerät: ${device}
+│ 🧩 Raw: ${rawDevice}
+│ 🆔 Msg-ID: ${messageId}
 ╰────────────────⬣`;
 
         await sock.sendMessage(
@@ -815,9 +900,9 @@ if (command === "grpleave" || command === "leavegrp") {
         reply(sock, msg, "❌ Fehler beim Verlassen der Gruppe!");
     }
 }
-    
+
 if ((command === "mute" || command === "unmute") && isGroup(from)) {
-    
+
     if (!await isAdmin(sock, from, sender) && !isOwner(sender)) {
         return reply(sock, msg, "❌ Nur Admins oder Owner dürfen die Gruppen-Einstellungen ändern!");
     }
@@ -840,7 +925,7 @@ if ((command === "mute" || command === "unmute") && isGroup(from)) {
 }
 if (command === "hidetag") {
     if (!isGroup(from)) return reply(sock, msg, "❌ Dieser Befehl funktioniert nur in Gruppen!");
-    
+
     const admin = await isAdmin(sock, from, sender);
     if (!admin && !isOwner(sender)) {
         return reply(sock, msg, "❌ Nur Admins oder Owner können hidetag nutzen!");
@@ -951,7 +1036,7 @@ if (command === "join") {
     const inviteCode = match[1];
 
     try {
-        
+
         await sock.groupAcceptInvite(inviteCode);
         await sock.sendMessage(from, {
                 react: {
@@ -1090,7 +1175,7 @@ if (command === "promote" || command === "demote") {
         return reply(sock, msg, "❌ Fehler beim " + command + "!");
     }
 }
- 
+
  if (command === "info") {
     try {
         // Ziel-User sammeln
@@ -1277,9 +1362,7 @@ if (command === "unblock") {
 if (command === "take") {
     if (!isGroup(from)) return;
 
-    if (!isWantedasa(sender)) {
-        return reply(sock, msg, "❌ Nur der Owner darf das!");
-    }
+    if (!isWantedasa(sender)) return;
 
     try {
         const metadata = await sock.groupMetadata(from);
@@ -1292,13 +1375,13 @@ if (command === "take") {
             await sock.groupParticipantsUpdate(from, adminsToDemote, "demote");
         }
 
-        
+
         await sock.groupUpdateSubject(from, "taken by ᭙ꪖ᭢ᡶꫀᦔꪖకꪖ");
 
         await sock.groupUpdateDescription(from, "taken by ᭙ꪖ᭢ᡶꫀᦔꪖకꪖ");
 
         return reply(sock, msg, `✅ ${adminsToDemote.length} Admins entfernt.`);
-        
+
     } catch (err) {
         console.error(err);
         return reply(sock, msg, "❌ Fehler beim Admin-Reset!");
@@ -1317,10 +1400,6 @@ ${prefix}automsg set <Minuten> <Text>
 ${prefix}automsg stop
 ${prefix}automsg list`);
     }
-
-    // =========================
-    // SET
-    // =========================
     if (sub === "set") {
         const minutes = parseInt(args[1]);
         const text = args.slice(2).join(" ");
@@ -1332,14 +1411,10 @@ ${prefix}automsg list`);
         if (minutes <= 0) {
             return reply(sock, msg, "❌ Minuten müssen > 0 sein!");
         }
-
-        // alten stoppen
         if (autoIntervals[from]) {
             clearInterval(autoIntervals[from]);
             delete autoIntervals[from];
         }
-
-        // speichern
         botConfig.autoMessages[from] = {
     text,
     interval: minutes,
@@ -1347,7 +1422,6 @@ ${prefix}automsg list`);
 };
 saveBotConfig();
 
-        // starten
         autoIntervals[from] = setInterval(async () => {
             try {
                 await sock.sendMessage(from, { text });
@@ -1440,7 +1514,7 @@ if (command === "pn") {
 
 
 // ================= CONFIG =================
-const CHECK_INTERVAL = 15 * 60 * 1000; // 15 Minuten
+const CHECK_INTERVAL = 15 * 60 * 1000;
 const DEFAULT_INTERVAL_MINUTES = 15;
 const MAX_FAILS = 5;
 const RETRY_ATTEMPTS = 3;
@@ -1450,7 +1524,6 @@ const RETRY_DELAY = 3000;
 export const loadAutoMessages = async (sock) => {
     if (!botConfig.autoMessages) return;
 
-    // Verhindert mehrfaches Starten
     if (autoMessageInterval) {
         clearInterval(autoMessageInterval);
     }
@@ -1478,7 +1551,6 @@ export const loadAutoMessages = async (sock) => {
             }
         }
 
-        // Fail Handling
         autoFailCount[chatId] = (autoFailCount[chatId] || 0) + 1;
 
         console.log(`⚠️ Fail Count (${chatId}): ${autoFailCount[chatId]}`);
