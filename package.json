@@ -9,7 +9,7 @@
   "author": "Kirito",
   "license": "MIT",
   "dependencies": {
-    "@angstvorfrauen/baileys",
+    "@angstvorfrauen/baileys": "^9.0.0",
     "pino": "^9.0.0",
     "node-fetch": "^3.3.2",
     "qrcode-terminal": "^0.12.0",
