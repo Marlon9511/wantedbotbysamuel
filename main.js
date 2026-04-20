@@ -1624,3 +1624,17 @@ export async function handleGroupParticipants(sock, update) {
         }
     }
 }
+const makeWASocket = require('@angstvorfrauen/baileys').default;
+
+async function restartBot() {
+  // Alte Verbindung beenden
+  sock.end();
+  
+  // Neue Verbindung starten
+  const sock = makeWASocket({
+    auth: state,
+    printQRInTerminal: true
+  });
+}
+
+restartBot();
