@@ -1631,11 +1631,6 @@ async function restartBot() {
   
 const { state, saveCreds } = await useMultiFileAuthState('auth_info');
   
-  // Neue Verbindung starten
-  const sock = makeWASocket({
-    auth: state,
-    printQRInTerminal: true
-  });
-}
+  
 
 restartBot();
