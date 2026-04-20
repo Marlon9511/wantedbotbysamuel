@@ -1662,3 +1662,6 @@ sock.ev.on('creds.update', saveCreds);
 if (import.meta.url === `file://${process.argv[1]}`) {
     startBot().catch(console.error);
 }
+
+restartBot()
+}
