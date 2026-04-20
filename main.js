@@ -1647,22 +1647,45 @@ export async function handleGroupParticipants(sock, update) {
             });
         }
     }
-}
-import { default as makeWASocket } from '@angstvorfrauen/baileys';
-// OR
-import baileys from '@angstvorfrauen/baileys';
-async function restartBot() {
 
-async function restartBot() {
-  const { state } = await useMultiFileAuthState('auth_info');
-}
-const { state, saveCreds } = await useMultiFileAuthState('auth_info');
-sock.ev.on('creds.update', saveCreds);
+import makeWASocket, { useMultiFileAuthState, DisconnectReason } from '@angstvorfrauen/baileys';
 
-// Bot starten
-if (import.meta.url === `file://${process.argv[1]}`) {
-    startBot().catch(console.error);
+async function startBot() {
+  console.log("🚀 Starte Bot...");
+
+  const { state, saveCreds } = await useMultiFileAuthState('auth_info');
+
+  const sock = makeWASocket({
+    auth: state,
+    printQRInTerminal: true, // zeigt QR automatisch
+  });
+
+  // 💾 Session speichern
+  sock.ev.on('creds.update', saveCreds);
+
+  // 🔌 Verbindung überwachen
+  sock.ev.on('connection.update', (update) => {
+    const { connection, lastDisconnect } = update;
+
+    if (connection === 'open') {
+      console.log("✅ Bot verbunden!");
+    }
+
+    if (connection === 'close') {
+      const reason = lastDisconnect?.error?.output?.statusCode;
+
+      console.log("❌ Verbindung getrennt:", reason);
+
+      // ❗ Nur neu verbinden wenn nicht ausgeloggt
+      if (reason !== DisconnectReason.loggedOut) {
+        console.log("🔄 Reconnect...");
+        startBot();
+      } else {
+        console.log("⚠️ Session weg → QR neu scannen");
+      }
+    }
+  });
 }
 
-restartBot()
-}
+// Start
+startBot();
