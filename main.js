@@ -1628,8 +1628,7 @@ import { default as makeWASocket } from '@angstvorfrauen/baileys';
 // OR
 import baileys from '@angstvorfrauen/baileys';
 async function restartBot() {
-  // Alte Verbindung beenden
-  sock.end();
+  
   
   // Neue Verbindung starten
   const sock = makeWASocket({
