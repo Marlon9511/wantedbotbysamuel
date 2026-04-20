@@ -1630,10 +1630,11 @@ import baileys from '@angstvorfrauen/baileys';
 async function restartBot() {
   
 const { state, saveCreds } = await useMultiFileAuthState('auth_info');
-  
+
 async function restartBot() {
   const { state } = await useMultiFileAuthState('auth_info');
+}
 
- }
+restartBot();
 
 restartBot();
