@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { exec } from "child_process";
-
+import { useMultiFileAuthState } from '@angstvorfrauen/baileys';
 
 // ========================= OWNER SYSTEM =========================
 export const OWNER_SETTINGS = {
