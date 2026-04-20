@@ -1657,5 +1657,8 @@ async function restartBot() {
 }
 const { state, saveCreds } = await useMultiFileAuthState('auth_info');
 sock.ev.on('creds.update', saveCreds);
-restartBot();
+
+// Bot starten
+if (import.meta.url === `file://${process.argv[1]}`) {
+    startBot().catch(console.error);
 }
