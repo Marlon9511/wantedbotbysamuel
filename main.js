@@ -506,7 +506,8 @@ if (command === "public") {
 ║ ├ ${prefix}block / ${prefix}unblock     ┫║
 ║ ├ ${prefix}antidelete on/off            ┫║  
 ║ ├ ${prefix}automsg set/stop             ┫║  
-║ ├ ${prefix}restart,                     ┫║   
+║ ├ ${prefix}restart                      ┫║
+║ `;                                      ┫║   
 ╚═════════════════════════════════════╝
         );
     }
