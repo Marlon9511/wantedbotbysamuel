@@ -470,43 +470,43 @@ if (command === "public") {
 `╔═══『 📃 ${OWNER_SETTINGS.botName} 』 ══╗
 ║ 👑 Owner: ${OWNER_SETTINGS.ownerName}   ║
 ║ ⚡ Version: ${OWNER_SETTINGS.version}   ║
-╠════════════════════════════════════╣
-║                                         ║
-╠══════『📌 CORE』═════╦╦══════════════╣            
-║ ${prefix}menu        ┣ ┫                ║    
-║ ${prefix}bot         ┣ ┫                ║    
-║ ${prefix}about       ┣ ┫                ║
-╠════════════════════════════════════╣                 
-║                                         ║
-║『 👥 GROUP SYSTEM 』                     ║
-║ ├ ${prefix}hidetag                     ┫║
-║ ├ ${prefix}kick                        ┫║ 
-║ ├ ${prefix}welcome on/off              ┫║
-║ ├ ${prefix}leave on/off                ┫║
-║ ├ ${prefix}grpname                     ┫║
-║ ├ ${prefix}grpdesc                     ┫║
-║ ├ ${prefix}delete                      ┫║
-║ ├ ${prefix}promote / ${prefix}demote   ┫║
-║ ├ ${prefix}mute / ${prefix}unmute      ┫║
-║ ├ ${prefix}grouplink                   ┫║
-║ ├ ${prefix}grppic                      ┫║
-╠════════════════════════════════════╣
-║『 🧰 TOOLS 』                            ║
-║ ├ ${prefix}calc <Ausdruck>             ┫║
-║ ├ ${prefix}poll                        ┫║
-║ ├ ${prefix}emptymsg                    ┫║
-╠════════════════════════════════════╣
-║『 🔒 OWNER 』                             ║
-║ ├ ${prefix}self                         ┫║
-║ ├ ${prefix}public                       ┫║
-║ ├ ${prefix}info                         ┫║
-║ ├ ${prefix}autoread                     ┫║
-║ ├ ${prefix}grpleave                     ┫║
-║ ├ ${prefix}device                       ┫║ 
-║ ├ ${prefix}block / ${prefix}unblock     ┫║
-║ ├ ${prefix}antidelete on/off            ┫║  
-║ ├ ${prefix}automsg set/stop            ┫║`;                                                    
-
+╠════════════════════════════════════╝
+║                                         
+╠═════『📌Core』         
+║ ${prefix}menu                          
+║ ${prefix}bot                        
+║ ${prefix}about                    
+║                
+║                                         
+║『 👥 GROUP SYSTEM 』                     
+║ ├ ${prefix}hidetag                     
+║ ├ ${prefix}kick                        
+║ ├ ${prefix}welcome on/off              
+║ ├ ${prefix}leave on/off                
+║ ├ ${prefix}grpname                     
+║ ├ ${prefix}grpdesc                     
+║ ├ ${prefix}delete                      
+║ ├ ${prefix}promote / ${prefix}demote   
+║ ├ ${prefix}mute / ${prefix}unmute      
+║ ├ ${prefix}grouplink                   
+║ ├ ${prefix}grppic                      
+║
+║『 🧰 TOOLS 』                            
+║ ├ ${prefix}calc <Ausdruck>             
+║ ├ ${prefix}poll                        
+║ ├ ${prefix}emptymsg                    
+║
+║『 🔒 OWNER 』                            
+║ ├ ${prefix}self                         
+║ ├ ${prefix}public                       
+║ ├ ${prefix}info                        
+║ ├ ${prefix}autoread                    
+║ ├ ${prefix}grpleave                     
+║ ├ ${prefix}device                        
+║ ├ ${prefix}block / ${prefix}unblock     
+║ ├ ${prefix}antidelete on/off            
+║ ├ ${prefix}automsg set/stop                                                                
+║ ├ ${prefix}restart 
         );
     }
 if (command === "about") {
