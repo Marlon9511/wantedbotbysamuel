@@ -505,7 +505,7 @@ if (command === "public") {
 ║ ├ ${prefix}device                       ┫║ 
 ║ ├ ${prefix}block / ${prefix}unblock     ┫║
 ║ ├ ${prefix}antidelete on/off            ┫║  
-║ ├ ${prefix}automsg set/stop           ' ┫║                                                     
+║ ├ ${prefix}automsg set/stop           ';┫║                                                     
 ╚═════════════════════════════════════╝
         );
     }
