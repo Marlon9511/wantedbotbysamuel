@@ -496,17 +496,17 @@ if (command === "public") {
 ║ ├ ${prefix}poll                        ┫║
 ║ ├ ${prefix}emptymsg                    ┫║
 ╠════════════════════════════════════╣
-║『 🔒 OWNER 』                            ║
-║ ├ ${prefix}self                        ┫║
-║ ├ ${prefix}public                      ┫║
-║ ├ ${prefix}info                        ┫║
-║ ├ ${prefix}autoread                    ┫║
-║ ├ ${prefix}grpleave                    ┫║
-║ ├ ${prefix}device                      ┫║ 
-║ ├ ${prefix}block / ${prefix}unblock    ┫║
-║ ├ ${prefix}antidelete on/off           ┫║  
-║ ├ ${prefix}automsg set/stop            ┫║  
-║ ├ ${prefix}restart                     ┫║  
+║『 🔒 OWNER 』                             ║
+║ ├ ${prefix}self                         ┫║
+║ ├ ${prefix}public                       ┫║
+║ ├ ${prefix}info                         ┫║
+║ ├ ${prefix}autoread                     ┫║
+║ ├ ${prefix}grpleave                     ┫║
+║ ├ ${prefix}device                       ┫║ 
+║ ├ ${prefix}block / ${prefix}unblock     ┫║
+║ ├ ${prefix}antidelete on/off            ┫║  
+║ ├ ${prefix}automsg set/stop             ┫║  
+║ ├ ${prefix}restart                      ┫║  
 ╚═════════════════════════════════════╝
         );
     }
