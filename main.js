@@ -1647,7 +1647,7 @@ export async function handleGroupParticipants(sock, update) {
             });
         }
     }
-wantedbot/.termux/boot/start-bot.sh
+wantedbot/termux/boot/start-bot.sh
 
 
 async function startBot() {
