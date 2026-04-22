@@ -528,8 +528,8 @@ if (command === "about") {
         const start = Date.now();
         await reply(sock, msg, "🏓 Pinging...");
         const latency = Date.now() - start;
-        return reply(sock, msg, `🏓 P̵̛͎͎̩̘̞͖͉̋͋̓͋̆̂͜o̸̧̭̫͔͓̗͌̽͒͑̀͆̒n̶̯̣͚̖̺̞̑͋́̒̕ǧ̴̢̠̭͖̝̰̲̎̆!̸̗̭̪͊̀̄̄̏̍͌̋̂͠
-!\n⏱️ L҉a҉t҉e҉n҉z҉: ${latency}ms`);
+        return reply(sock, msg, `🏓 卩ㄖ几Ꮆ
+!\n⏱️ ﾚﾑｲ乇刀乙 ${latency}ms`);
     }
     if (command === "kick") {
     if (!isGroup(from)) return;
