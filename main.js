@@ -12,7 +12,7 @@ export const OWNER_SETTINGS = {
     owner2Lid: "45681943306435@lid",
     owner3Lid: "218507098771705@lid",
     owner4Lid: "85865774756093@lid",
-    ownerName: "kirito",
+    ownerName: "𝒜𝓀𝒶𝓂ℯ • 𝓚𝓲𝓻𝓲𝓽𝓸",
     botName: "᭙ꪖ᭢ᡶꫀᦔꪖకꪖ",
     packName: "wantedasa",
     version: "1.0.0"
