@@ -1646,12 +1646,19 @@ export async function handleGroupParticipants(sock, update) {
             });
         }
     }
-"hat {target} mit einem Kissen getroffen 🛏️",
+} // ✅ Funktion richtig geschlossen
+
+
+// ✅ Array richtig definieren
+const fights = [
+  "hat {target} mit einem Kissen getroffen 🛏️",
   "hat {target} mit einer Wasserpistole nass gemacht 💦",
   "hat {target} im Duell besiegt ⚔️",
   "hat {target} ausgetrickst 🤹"
-};
+];
 
+
+// ✅ Event richtig geschlossen
 client.on("message", async (message) => {
   if (message.body.startsWith("!fight")) {
     const mentioned = message.mentionedIds[0];
@@ -1666,45 +1673,6 @@ client.on("message", async (message) => {
       message._data.notifyName + " " +
       action.replace("{target}", target.pushname || "jemand")
     );
-}`
-
-
-async function startBot() {
-  console.log("🚀 Starte Bot...");
-
-  const { state, saveCreds } = await useMultiFileAuthState('auth_info');
-
-  const sock = makeWASocket({
-    auth: state,
-    printQRInTerminal: true, // zeigt QR automatisch
-  });
-
-  // 💾 Session speichern
-  sock.ev.on('creds.update', saveCreds);
-
-  // 🔌 Verbindung überwachen
-  sock.ev.on('connection.update', (update) => {
-    const { connection, lastDisconnect } = update;
-
-    if (connection === 'open') {
-      console.log("✅ Bot verbunden!");
-    }
-
-    if (connection === 'close') {
-      const reason = lastDisconnect?.error?.output?.statusCode;
-
-      console.log("❌ Verbindung getrennt:", reason);
-
-      // ❗ Nur neu verbinden wenn nicht ausgeloggt
-      if (reason !== DisconnectReason.loggedOut) {
-        console.log("🔄 Reconnect...");
-        startBot();
-      } else {
-        console.log("⚠️ Session weg → QR neu scannen");
-      }
-    }
-  });
-}
-
-// Start
-startBot();
+  }
+});
+startbot ()
