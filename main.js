@@ -1659,11 +1659,9 @@ const fights = [
 
 
 // ✅ Event richtig geschlossen
-client.on("message", async (message) => {
-  if (message.body.startsWith("!fight")) {
-    const mentioned = message.mentionedIds[0];
-    if (!mentioned) {
-      return message.reply("Markiere jemanden für ein Duell!");
+sock.ev.on("messages.upsert", async ({ messages }) => {
+    const message = messages[0];
+    if (!message.message) return; message.reply("Markiere jemanden für ein Duell!");
     }
 
     const target = await client.getContactById(mentioned);
