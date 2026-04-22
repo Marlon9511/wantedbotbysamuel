@@ -464,7 +464,7 @@ if (command === "public") {
 
     return reply(sock, msg, "🌍 PUBLIC MODE aktiviert");
 }      
--
+
     if (command === "menu") {
         return reply(sock, msg,
 `╔═══『 📃 ${OWNER_SETTINGS.botName} 』 ══╗
