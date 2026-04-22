@@ -1664,7 +1664,7 @@ sock.ev.on("messages.upsert", async ({ messages }) => {
     if (!message.message) return; message.reply("Markiere jemanden für ein Duell!");
     },
 
-    const target = await client.getContactById(mentioned);
+const target = await client.getContactById(mentioned);
     const action = fights[Math.floor(Math.random() * fights.length)];
 
     message.reply(
