@@ -1666,7 +1666,6 @@ client.on("message", async (message) => {
       message._data.notifyName + " " +
       action.replace("{target}", target.pushname || "jemand")
     );
-  }
 });
 
 
