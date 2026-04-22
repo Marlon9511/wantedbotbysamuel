@@ -463,29 +463,7 @@ if (command === "public") {
     saveBotConfig();
 
     return reply(sock, msg, "🌍 PUBLIC MODE aktiviert");
-}
-"hat {target} mit einem Kissen getroffen 🛏️",
-  "hat {target} mit einer Wasserpistole nass gemacht 💦",
-  "hat {target} im Duell besiegt ⚔️",
-  "hat {target} ausgetrickst 🤹"
-};
-
-client.on("message", async (message) => {
-  if (message.body.startsWith("!fight")) {
-    const mentioned = message.mentionedIds[0];
-    if (!mentioned) {
-      return message.reply("Markiere jemanden für ein Duell!");
-    }
-
-    const target = await client.getContactById(mentioned);
-    const action = fights[Math.floor(Math.random() * fights.length)];
-
-    message.reply(
-      message._data.notifyName + " " +
-      action.replace("{target}", target.pushname || "jemand")
-    );
-  }
-});
+}      
 -
     if (command === "menu") {
         return reply(sock, msg,
