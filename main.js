@@ -1647,7 +1647,7 @@ export async function handleGroupParticipants(sock, update) {
         }
     }
 } 
-
+const { Client, MessageMedia } = require('whatsapp-web.js');
 client.on('message', async message => {
     if (message.hasMedia) {
         const media = await message.downloadMedia();
