@@ -4,7 +4,7 @@ import pkg from 'whatsapp-web.js';
 import Jimp from 'jimp';
 import fs from 'fs';
 
-const { Client, MessageMedia, LocalAuth } = pkg;
+
 import sharp from "sharp";
 import path from "path";
 import { exec } from "child_process";
@@ -1655,9 +1655,7 @@ export async function handleGroupParticipants(sock, update) {
     }
 } 
 
-import { Client, MessageMedia, LocalAuth } from 'whatsapp-web.js';
-
-import fs from 'fs';
+const { Client, MessageMedia, LocalAuth } = pkg;
 
 const client = new Client({
     authStrategy: new LocalAuth(),
