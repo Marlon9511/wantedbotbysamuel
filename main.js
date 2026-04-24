@@ -1,7 +1,6 @@
 console.log("Script gestartet");
 
-import { Client } from 'whatsapp-web.js';
-import fs from "fs";
+
 import path from "path";
 import { exec } from "child_process";
 import { useMultiFileAuthState } from '@angstvorfrauen/baileys';
@@ -1651,31 +1650,46 @@ export async function handleGroupParticipants(sock, update) {
     }
 } 
 
-const client = new Client();
-client.on('message', async message => {
-    if (message.hasMedia) {
-        const media = await message.downloadMedia();
+import { Client, MessageMedia, LocalAuth } from 'whatsapp-web.js';
+import sharp from 'sharp';
+import fs from 'fs';
 
-        if (media.mimetype.startsWith('image')) {
-            const buffer = Buffer.from(media.data, 'base64');
-
-            // Bild in WebP konvertieren (Sticker-Format)
-            const stickerPath = './sticker.webp';
-
-            await sharp(buffer)
-                .resize(512, 512, { fit: 'contain' })
-                .webp()
-                .toFile(stickerPath);
-
-            const sticker = MessageMedia.fromFilePath(stickerPath);
-
-            await client.sendMessage(message.from, sticker, {
-                sendMediaAsSticker: true
-            });
-
-            fs.unlinkSync(stickerPath);
-        }
+const client = new Client({
+    authStrategy: new LocalAuth(),
+    puppeteer: {
+        executablePath: '/data/data/com.termux/files/usr/bin/chromium',
+        headless: true,
+        args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--disable-dev-shm-usage',
+            '--disable-gpu',
+            '--single-process'
+        ]
     }
+});
+
+client.on('message', async (message) => {
+    if (!message.hasMedia) return;
+
+    const media = await message.downloadMedia();
+    if (!media || !media.mimetype.startsWith('image')) return;
+
+    const buffer = Buffer.from(media.data, 'base64');
+    const stickerPath = './sticker.webp';
+
+    await sharp(buffer)
+        .resize(512, 512, { fit: 'contain' })
+        .webp()
+        .toFile(stickerPath);
+
+    const sticker = MessageMedia.fromFilePath(stickerPath);
+
+    await client.sendMessage(message.from, sticker, {
+        sendMediaAsSticker: true
+    });
+
+    fs.unlinkSync(stickerPath);
 });
 
 client.initialize();
