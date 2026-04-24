@@ -1,5 +1,10 @@
 console.log("Script gestartet");
 
+import pkg from 'whatsapp-web.js';
+import Jimp from 'jimp';
+import fs from 'fs';
+
+const { Client, MessageMedia, LocalAuth } = pkg;
 import sharp from "sharp";
 import path from "path";
 import { exec } from "child_process";
