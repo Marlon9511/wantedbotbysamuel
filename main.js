@@ -1651,7 +1651,7 @@ export async function handleGroupParticipants(sock, update) {
 } 
 
 import { Client, MessageMedia, LocalAuth } from 'whatsapp-web.js';
-import sharp from 'sharp';
+
 import fs from 'fs';
 
 const client = new Client({
