@@ -1648,6 +1648,33 @@ export async function handleGroupParticipants(sock, update) {
     }
 } 
 
+client.on('message', async message => {
+    if (message.hasMedia) {
+        const media = await message.downloadMedia();
+
+        if (media.mimetype.startsWith('image')) {
+            const buffer = Buffer.from(media.data, 'base64');
+
+            // Bild in WebP konvertieren (Sticker-Format)
+            const stickerPath = './sticker.webp';
+
+            await sharp(buffer)
+                .resize(512, 512, { fit: 'contain' })
+                .webp()
+                .toFile(stickerPath);
+
+            const sticker = MessageMedia.fromFilePath(stickerPath);
+
+            await client.sendMessage(message.from, sticker, {
+                sendMediaAsSticker: true
+            });
+
+            fs.unlinkSync(stickerPath);
+        }
+    }
+});
+
+client.initialize();
 
 async function startBot() {
 startbot ()
