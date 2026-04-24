@@ -1,6 +1,6 @@
 console.log("Script gestartet");
 
-import shard from "shard";
+import sharp from "sharp";
 import path from "path";
 import { exec } from "child_process";
 import { useMultiFileAuthState } from '@angstvorfrauen/baileys';
