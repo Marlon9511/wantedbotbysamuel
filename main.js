@@ -6,6 +6,7 @@ import path from "path";
 import { exec } from "child_process";
 import { useMultiFileAuthState } from '@angstvorfrauen/baileys';
 
+const client = new Client();
 
 // ========================= OWNER SYSTEM =========================
 export const OWNER_SETTINGS = {
