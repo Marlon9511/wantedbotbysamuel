@@ -1,6 +1,6 @@
 console.log("Script gestartet");
 
-import whatsapp-Web.js from "whatsapp-web.js "
+import whatsapp Web.js from "whatsapp web.js "
 import fs from "fs";
 import path from "path";
 import { exec } from "child_process";
