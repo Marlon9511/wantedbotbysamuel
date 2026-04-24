@@ -6,7 +6,7 @@ import path from "path";
 import { exec } from "child_process";
 import { useMultiFileAuthState } from '@angstvorfrauen/baileys';
 
-const client = new Client();
+
 
 // ========================= OWNER SYSTEM =========================
 export const OWNER_SETTINGS = {
@@ -1651,6 +1651,7 @@ export async function handleGroupParticipants(sock, update) {
     }
 } 
 
+const client = new Client();
 client.on('message', async message => {
     if (message.hasMedia) {
         const media = await message.downloadMedia();
