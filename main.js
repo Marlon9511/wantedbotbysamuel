@@ -1654,7 +1654,38 @@ export async function handleGroupParticipants(sock, update) {
         }
     }
 } 
-if (command === "sticker") {
+client.on('message', async (message) => {
+    const text = message.body || '';
+    const command = text.split(' ')[0].toLowerCase();
+
+    if (command === 'sticker') {
+
+        if (!message.hasMedia) {
+            return message.reply('❌ Bitte sende ein Bild mit dem Command "sticker"');
+        }
+
+        const media = await message.downloadMedia();
+
+        if (!media || !media.mimetype.startsWith('image')) {
+            return message.reply('❌ Nur Bilder sind erlaubt!');
+        }
+
+        const buffer = Buffer.from(media.data, 'base64');
+        const stickerPath = './sticker.webp';
+
+        const image = await Jimp.read(buffer);
+        image.contain(512, 512);
+        await image.writeAsync(stickerPath);
+
+        const sticker = MessageMedia.fromFilePath(stickerPath);
+
+        await client.sendMessage(message.from, sticker, {
+            sendMediaAsSticker: true
+        });
+
+        fs.unlinkSync(stickerPath);
+    }
+});
 const { Client, MessageMedia, LocalAuth } = pkg;
 
 const client = new Client({
