@@ -1654,21 +1654,40 @@ export async function handleGroupParticipants(sock, update) {
         }
     }
 } 
+import pkg from 'whatsapp-web.js';
+import Jimp from 'jimp';
+import fs from 'fs';
+
+const { Client, MessageMedia, LocalAuth } = pkg;
+
+// ✅ ERST erstellen
+const client = new Client({
+    authStrategy: new LocalAuth(),
+    puppeteer: {
+        executablePath: '/data/data/com.termux/files/usr/lib/chromium/chromium-launcher.sh',
+        headless: true,
+        args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--disable-dev-shm-usage',
+            '--disable-gpu'
+        ]
+    }
+});
+
+// ✅ DANN benutzen
 client.on('message', async (message) => {
     const text = message.body || '';
-    const command = text.split(' ')[0].toLowerCase();
+    const command = text.toLowerCase();
 
     if (command === 'sticker') {
 
         if (!message.hasMedia) {
-            return message.reply('❌ Bitte sende ein Bild mit dem Command "sticker"');
+            return message.reply('❌ Schick ein Bild mit "sticker"');
         }
 
         const media = await message.downloadMedia();
-
-        if (!media || !media.mimetype.startsWith('image')) {
-            return message.reply('❌ Nur Bilder sind erlaubt!');
-        }
+        if (!media || !media.mimetype.startsWith('image')) return;
 
         const buffer = Buffer.from(media.data, 'base64');
         const stickerPath = './sticker.webp';
@@ -1686,47 +1705,9 @@ client.on('message', async (message) => {
         fs.unlinkSync(stickerPath);
     }
 });
-const { Client, MessageMedia, LocalAuth } = pkg;
 
-const client = new Client({
-    puppeteer: {
-        executablePath: '/data/data/com.termux/files/usr/lib/chromium/chromium-launcher.sh',
-        headless: true,
-        args: [
-            '--no-sandbox',
-            '--disable-setuid-sandbox',
-            '--disable-dev-shm-usage',
-            '--disable-gpu',
-            '--disable-software-rasterizer',
-            '--disable-extensions'
-        ]
-    }
-});
-client.on('message', async (message) => {
-    if (!message.hasMedia) return;
-
-    const media = await message.downloadMedia();
-    if (!media || !media.mimetype.startsWith('image')) return;
-
-    const buffer = Buffer.from(media.data, 'base64');
-    const stickerPath = './sticker.webp';
-
-    await sharp(buffer)
-        .resize(512, 512, { fit: 'contain' })
-        .webp()
-        .toFile(stickerPath);
-
-    const sticker = MessageMedia.fromFilePath(stickerPath);
-
-    await client.sendMessage(message.from, sticker, {
-        sendMediaAsSticker: true
-    });
-
-    fs.unlinkSync(stickerPath);
-});
-
+// ✅ GANZ AM ENDE starten
 client.initialize();
-
 async function startBot() {
 startbot ()
 }
