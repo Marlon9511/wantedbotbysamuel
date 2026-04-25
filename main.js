@@ -1660,7 +1660,7 @@ const { Client, MessageMedia, LocalAuth } = pkg;
 const client = new Client({
     authStrategy: new LocalAuth(),
     puppeteer: {
-        executablePath: '/data/data/com.termux/files/usr/lib/chromium/chromium-launcher.sh',
+        executablePath: '/data/data/com.termux/files/usr/lib/chromium/chrome-wrapper',
         headless: true,
         args: [
             '--no-sandbox',
@@ -1669,16 +1669,16 @@ const client = new Client({
             '--disable-gpu',
             '--disable-software-rasterizer',
             '--disable-extensions',
+            '--no-first-run',
+            '--no-zygote',
             '--disable-background-networking',
             '--disable-sync',
             '--disable-default-apps',
-            '--no-first-run',
-            '--no-zygote',
             '--disable-features=site-per-process',
-            '--user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36'
+            '--remote-debugging-port=9222'
         ]
     }
-}); 
+});
 
 
 
