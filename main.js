@@ -1724,7 +1724,7 @@ client.on('message', async (message) => {
 
     fs.unlinkSync(stickerPath);
 });
-}
+
 client.initialize();
 
 async function startBot() {
