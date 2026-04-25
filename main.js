@@ -1,6 +1,6 @@
 console.log("Script gestartet");
 
-import pkg from 'whatsapp-web.js';
+
 import Jimp from 'jimp';
 import fs from 'fs';
 
