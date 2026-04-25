@@ -1654,7 +1654,7 @@ export async function handleGroupParticipants(sock, update) {
         }
     }
 } 
-
+if (command === "sticker") {
 const { Client, MessageMedia, LocalAuth } = pkg;
 
 const client = new Client({
