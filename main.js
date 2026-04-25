@@ -1658,20 +1658,19 @@ export async function handleGroupParticipants(sock, update) {
 const { Client, MessageMedia, LocalAuth } = pkg;
 
 const client = new Client({
-    authStrategy: new LocalAuth(),
     puppeteer: {
-        executablePath: '/data/data/com.termux/files/usr/bin/chromium',
+        executablePath: '/data/data/com.termux/files/usr/lib/chromium/chromium-launcher.sh',
         headless: true,
         args: [
             '--no-sandbox',
             '--disable-setuid-sandbox',
             '--disable-dev-shm-usage',
             '--disable-gpu',
-            '--single-process'
+            '--disable-software-rasterizer',
+            '--disable-extensions'
         ]
     }
 });
-
 client.on('message', async (message) => {
     if (!message.hasMedia) return;
 
