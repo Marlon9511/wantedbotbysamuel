@@ -1,7 +1,7 @@
 console.log("Script gestartet");
 
 
-import Jimp from 'jimp';
+
 import fs from 'fs';
 
 
