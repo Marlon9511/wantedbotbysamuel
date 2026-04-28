@@ -1,4 +1,4 @@
-import { makeWASocket, useMultiFileAuthState } from "@717Development/baileys";
+import { makeWASocket, useMultiFileAuthState } from "@717development/baileys";
 import pino from "pino";
 import readline from "readline";
 import chalk from "chalk";
