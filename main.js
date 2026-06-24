@@ -4,7 +4,7 @@ console.log("Script gestartet");
 import sharp from "sharp";
 import path from "path";
 import { exec } from "child_process";
-import { useMultiFileAuthState } from '@717development/baileys;
+import { useMultiFileAuthState } from '@angstvorfrauen/baileys;
 
 
 
